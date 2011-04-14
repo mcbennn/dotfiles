@@ -1,15 +1,19 @@
 " .vimrc config file based on :
 "   https://github.com/matthewtodd/dotfiles/
 "   https://github.com/imathis/vimrc/
-
-" set up pathogen, http://github.com/tpope/vim-pathogen
-filetype off
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
-filetype plugin indent on
+"   https://github.com/tlvince/vimfiles
 
 " don't bother with vi compatibility
 set nocompatible
+
+" Load plugins managed by pathogen
+filetype off            " Fixes issues with ftdetect files. See pathogen docs.
+let g:pathogen_disabled = ['pathogen']  " Prevent pathogen from self-sourcing
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
+
+
+filetype plugin indent on
 
 " general settings
 set autoindent
