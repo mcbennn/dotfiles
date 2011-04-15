@@ -1,75 +1,189 @@
-" .vimrc config file based on :
-"   https://github.com/matthewtodd/dotfiles/
-"   https://github.com/imathis/vimrc/
-"   https://github.com/tlvince/vimfiles
+" vim: set fdm=marker:
+" vimrc: a monolithic vim setup. {{{1
+" License: GPL
+" Copyright 2011 mcbennn <mcbennn@gmail.com>
+" see https://github.com/matthewtodd/dotfiles/
+" see https://github.com/imathis/vimrc/
+" see https://github.com/tlvince/vimfiles
+" http://stevelosh.com/blog/2010/09/coming-home-to-vim/
 
-" don't bother with vi compatibility
+" Environment {{{1
+
+" Forget about vi and set it first as it modifies future behaviour
 set nocompatible
+
+" Make vim respect the XDG base directory spec.
+"set directory=$XDG_CACHE_HOME/vim,~/,/tmp
+"set backupdir=$XDG_CACHE_HOME/vim,~/,/tmp
+"set viminfo+=n$XDG_CACHE_HOME/vim/viminfo
+"set runtimepath=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after,$VIM,$VIMRUNTIME
+"let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
 
 " Load plugins managed by pathogen
 filetype off            " Fixes issues with ftdetect files. See pathogen docs.
-let g:pathogen_disabled = ['pathogen']  " Prevent pathogen from self-sourcing
+"let g:pathogen_disabled = ['pathogen']  " Prevent pathogen from self-sourcing
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 
+" General preferences {{{1
 
-filetype plugin indent on
+set modelines=0
 
-" general settings
-set autoindent
-set autoread        " reload files when changed on disk, i.e. via `git checkout`
-set encoding=utf-8
-set expandtab       " expand tabs to spaces
-set ignorecase      " case-insensitive search
-set incsearch       " search as I type
-set hls             " higlhight search results
-set list            " show trailing whitespace
-set listchars=tab:▸\ ,trail:▫
-set ruler           " show me where I am
-set scrolloff=3     " show context above/below cursor line
-set shiftwidth=2    " normal mode indentation commands use 2 spaces
-set softtabstop=2   " insert mode tab and backspace use 2 spaces
-set smartcase       " case-sensitive search if any caps
-set tabstop=4       " any actual tab characters occupy 8 spaces
-set wildmenu        " show a navigable menu for tab completion
-set wildmode=list:longest " helpful tab completion
-set smarttab
-"set foldenable
+" File based
+filetype plugin on      " Load file type plugins
+filetype indent on      " Enable file type based indentation
+syntax on               " Enable syntax highlighting
+
+" Tabbing
+set tabstop=4           " The number of spaces a tab is
+set shiftwidth=4        " Number of spaces to use in auto(indent)
+set softtabstop=4       " Just to be clear
+set expandtab           " Insert tabs as spaces
+"set autoindent
+"set smarttab
+
+" Searching
+set wrapscan            " Wrap searches
+set ignorecase          " Ignore search term case...
+set smartcase           " ... unless term contains an uppercase character
+set incsearch           " Highlight search...
+set showmatch           " ... results
+set hlsearch            " ... as you type
+set gdefault            " substitutions globally on lines
+
+" Wrapping
+set textwidth=80        " Hard-wrap text at nth column
+set wrap                " Wrap long lines
+
+" General
+set ruler                 " Show [line,col] number (in status bar)
 set cursorline
-set ruler
+set list                  " Show trailing whitespace
+set listchars=tab:▸\ ,trail:▫,extends:#,nbsp:⋅,eol:¬
+set foldenable
+set foldmethod=marker
+set showmode              " Persistent notice of current mode
+set history=1000          " Number of ":" commands and searches to remember
+set undolevels=1000
+set spelllang=fr_FR       " Speak proper English
+set wildmenu              " dmenu style menu for commands
+set wildmode=list:longest " helpful tab completion
+set wildignore+=log/**,tmp/**,cache/**,app/cache/**,*.swp,*.bak,*.pyc,*.o,*.obj,.git,.svn,*.class
+set fillchars=""          " Remove characters in window split
+set encoding=utf-8        " Default encoding
+set scrolloff=3           " 3 lines of context
+"set autoread              " reload files when changed on disk, i.e. via `git checkout`
+set nobackup
+set noswapfile
+set backspace=indent,eol,start          " Allow backspacing on the given values
 
-" don't bother prompting to open these files. also removes them from
-" Command-T's listing, which is nice.
-set wildignore=log/**,tmp/**
-
-" syntax highlighting
-syntax enable
-
-" gui settings
-if (&t_Co == 256 || has('gui_running'))
-  set background=dark
-  colorscheme solarized
-  set cursorline        " highlight current line
-  set laststatus=2      " always show status line
+" Featured by vim 7.3
+if v:version >= 730
+    set relativenumber
+    set undofile
 endif
+
+" Visuals {{{1
 
 if has('gui_running')
-  set columns=164       " new windows shouldn't inherit previous width
-"  set fuoptions=maxvert,maxhorz
-  set guifont=Monospace\ 10
-  set guioptions=a      " selection->clipboard
-  set number            " enable line numbering
-"  set transp=5          " = 95% opacity
+    if has('win32') || has('win64')
+        set guifont=DejaVu_Sans_Mono:h10:cANSI   " Be explicit for Windows
+    else
+        set guifont=Monospace\ 10                " Fallback to system default
+    endif
+    set guioptions-=T                       " Hide toolbar
+    set guioptions-=m                       " Hide menu bar
+    set guioptions-=r                       " Hide right hand scroll bar
+    set guioptions-=L                       " Hide left hand scroll bar
+    set background=dark
+"    set transp=5                            " = 95% opacity
+    colorscheme solarized
+    set number
+    set laststatus=2                        " always show status line
+"    set columns=164       " new windows shouldn't inherit previous width
+else
+    set title
+    set background=dark
+    colorscheme desert
 endif
 
+" Mappings {{{1
+
+" Map leader (the dedicated user-mapping prefix key) to comma
+let mapleader = ","
+
+inoremap jj <ESC>
+
+" Leader + v to open vimrc in a new tab
+nmap <leader>v :tabedit $MYVIMRC<CR>
+
+" Leader + t to open a new tab
+nmap <leader>T :tabnew<CR>
+
+" Open a file (relative to the current file) in a new tab
+map <leader>e :tabe <C-R>=expand("%:p:h") . "/" <CR>
+
+" clear out a search
+nnoremap <leader><space> :noh<cr>
+
+nnoremap <tab> %
+vnoremap <tab> %
+
+" Shortcut to rapidly toggle `set list`
+nmap <leader>l :set list!<CR>
+
+" Quickly close the current window
+nnoremap <leader>q :q<CR>
+
+" Disable arrow keys (force good habits)
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+vnoremap <up> <nop>
+vnoremap <down> <nop>
+vnoremap <left> <nop>
+vnoremap <right> <nop>
+
+" Always move between wrapped lines
+nnoremap j gj
+nnoremap k gk
+
+" Move between splits with CTRL+[hjkl]
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Fix default regex search
+nnoremap / /\v
+vnoremap / /\v
+
+" Function keys
+map <F2> :NERDTreeToggle<CR>
+set pastetoggle=<F3>
+
+cmap w!! w !sudo tee % >/dev/null
 
 " Menu and Tool bars is hidden by default
 " CTRL+<F1> toggles Menubar
-set guioptions-=m  "remove menubar
 nnoremap <C-F1> :if &go=~#'m'<Bar>set go-=m<Bar>else<Bar>set go+=m<Bar>endif<CR>
 " CTRL+<F2> toggles Toolbar
-set guioptions-=T  "remove toolbar
 nnoremap <C-F2> :if &go=~#'T'<Bar>set go-=T<Bar>else<Bar>set go+=T<Bar>endif<CR>
+
+" Autocommands {{{1
+
+autocmd filetype html,xml set listchars-=tab:▸\ 
+
+" Always fold Python files
+autocmd Filetype python set foldmethod=indent
+
+" Re-source vimrc whenever changes are saved
+autocmd BufWritePost .vimrc source $MYVIMRC
 
 " FuzzyFinder shortcut
 "nmap <leader>ff :FufFile **/<CR>
