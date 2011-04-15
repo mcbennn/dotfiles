@@ -188,11 +188,19 @@ nmap <leader>ac :center<CR>
 " replace)
 nmap <leader>z :%s#\<<C-r>=expand("<cword>")<CR>\>#
 
+" Run Ack fast
+nnoremap <leader>a :Ack<Space>
+
 " Menu and Tool bars is hidden by default
 " CTRL+<F1> toggles Menubar
 nnoremap <C-F1> :if &go=~#'m'<Bar>set go-=m<Bar>else<Bar>set go+=m<Bar>endif<CR>
 " CTRL+<F2> toggles Toolbar
 nnoremap <C-F2> :if &go=~#'T'<Bar>set go-=T<Bar>else<Bar>set go+=T<Bar>endif<CR>
+
+" Bundles and plugins {{{1
+
+" Command line used by Ack
+let g:ackprg="ack-grep -H --nocolor --nogroup --column"
 
 " Autocommands {{{1
 
