@@ -167,7 +167,26 @@ vnoremap / /\v
 map <F2> :NERDTreeToggle<CR>
 set pastetoggle=<F3>
 
+" Sudo to write
 cmap w!! w !sudo tee % >/dev/null
+
+" Quick yanking to the end of the line
+nmap Y y$
+
+" Yank/paste to the OS clipboard with ,y and ,p
+nmap <leader>y "+y
+nmap <leader>Y "+yy
+nmap <leader>p "+p
+nmap <leader>P "+P
+
+" Quick alignment of text
+nmap <leader>al :left<CR>
+nmap <leader>ar :right<CR>
+nmap <leader>ac :center<CR>
+
+" Pull word under cursor into LHS of a substitute (for quick search and
+" replace)
+nmap <leader>z :%s#\<<C-r>=expand("<cword>")<CR>\>#
 
 " Menu and Tool bars is hidden by default
 " CTRL+<F1> toggles Menubar
