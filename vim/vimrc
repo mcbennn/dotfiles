@@ -202,6 +202,9 @@ nnoremap <C-F2> :if &go=~#'T'<Bar>set go-=T<Bar>else<Bar>set go+=T<Bar>endif<CR>
 " Command line used by Ack
 let g:ackprg="ack-grep -H --nocolor --nogroup --column"
 
+" snipMate
+let g:snips_author='Benoit Tirmarche <btirmarche@acipia.fr>'
+
 " Autocommands {{{1
 
 autocmd filetype html,xml set listchars-=tab:▸\ 
@@ -212,6 +215,10 @@ autocmd Filetype python set foldmethod=indent
 " Re-source vimrc whenever changes are saved
 autocmd BufWritePost .vimrc source $MYVIMRC
 
+" Restore cursor position upon reopening files
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+
+" }}}
 " FuzzyFinder shortcut
 "nmap <leader>ff :FufFile **/<CR>
 "nmap <leader>fb :FufBuffer<CR>
