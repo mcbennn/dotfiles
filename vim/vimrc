@@ -199,6 +199,7 @@ nnoremap <C-F2> :if &go=~#'T'<Bar>set go-=T<Bar>else<Bar>set go+=T<Bar>endif<CR>
 
 " Bundles and plugins {{{1
 
+
 " Command line used by Ack
 let g:ackprg="ack-grep -H --nocolor --nogroup --column"
 
@@ -207,13 +208,26 @@ let g:snips_author='Benoit Tirmarche <btirmarche@acipia.fr>'
 
 " Autocommands {{{1
 
+" PHP Syntax highlighting
+autocmd Filetype php let php_folding = 1
+autocmd Filetype php let php_sql_query = 1
+autocmd Filetype php let php_htmlInStrings = 1
+
+" Do not fold php files
+autocmd Filetype php set nofoldenable
+
+" Enable lint checking for PHP files
+autocmd Filetype php set makeprg=php\ -l\ %
+autocmd Filetype php set errorformat=%m\ in\ %f\ on\ line\ %l
+
+" Do no display tab on html files
 autocmd filetype html,xml set listchars-=tab:▸\ 
 
 " Always fold Python files
 autocmd Filetype python set foldmethod=indent
 
 " Re-source vimrc whenever changes are saved
-autocmd BufWritePost .vimrc source $MYVIMRC
+"autocmd BufWritePost .vimrc source $MYVIMRC
 
 " Restore cursor position upon reopening files
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
