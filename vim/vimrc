@@ -52,8 +52,8 @@ set hlsearch            " ... as you type
 set gdefault            " substitutions globally on lines
 
 " Wrapping
-set textwidth=80        " Hard-wrap text at nth column
-set wrap                " Wrap long lines
+"set textwidth=80        " Hard-wrap text at nth column
+"set wrap                " Wrap long lines
 
 " General
 set ruler                 " Show [line,col] number (in status bar)
@@ -153,6 +153,14 @@ vnoremap <right> <nop>
 nnoremap j gj
 nnoremap k gk
 
+" Display buffer list, press number to switch to
+nnoremap <F5> :buffers<CR>:buffer<Space>
+
+" Buffers - explore/next/previous: Alt-F12, F12, Shift-F12.
+nnoremap <silent> <M-F12> :BufExplorer<CR>
+nnoremap <silent> <F12> :bn<CR>
+nnoremap <silent> <S-F12> :bp<CR>
+
 " Move between splits with CTRL+[hjkl]
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -199,6 +207,7 @@ nnoremap <C-F2> :if &go=~#'T'<Bar>set go-=T<Bar>else<Bar>set go+=T<Bar>endif<CR>
 
 " Bundles and plugins {{{1
 
+let g:sql_type_default = 'mysql'
 
 " Command line used by Ack
 let g:ackprg="ack-grep -H --nocolor --nogroup --column"
